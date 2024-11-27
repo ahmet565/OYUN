@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basit Oyun</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: #87CEEB; /* Gök mavisi arka plan */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Phaser.js kütüphanesini yükleyelim -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+
+    <script>
+        // Phaser oyun konfigürasyonu
+        var config = {
+            type: Phaser.AUTO, // Otomatik olarak WebGL veya Canvas kullanır
+            width: 800, // Oyun alanı genişliği
+            height: 600, // Oyun alanı yüksekliği
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var player;
+        var cursors;
+
+        var game = new Phaser.Game(config);
+
+        // Oyun varlıklarını yüklemek için preload fonksiyonu
+        function preload() {
+            // Burada oyun karakteri olarak bir kare ekleyeceğiz
+            this.load.image('player', 'https://phaser.io/content/examples/arcade-physics/sprites/player.png');
+        }
+
+        // Oyun başladığında yapılacak işlemler
+        function create() {
+            // Oyuncu karakterini ekleyelim
+            player = this.physics.add.image(400, 300, 'player');
+
+            // Oyuncunun hareket etmesi için fiziksel özellikler ekleyelim
+            player.setCollideWorldBounds(true); // Ekranın dışına çıkmasını engelle
+
+            // Klavye ok tuşları ile oyuncunun hareket etmesi için input
+            cursors = this.input.keyboard.createCursorKeys();
+        }
+
+        // Oyun döngüsünde her frame'de yapılacak işlemler
+        function update() {
+            // Oyuncu yukarı hareket ediyor
+            if (cursors.up.isDown) {
+                player.setVelocityY(-160);
+            }
+            // Oyuncu aşağı hareket ediyor
+            else if (cursors.down.isDown) {
+                player.setVelocityY(160);
+            }
+            // Oyuncu sola hareket ediyor
+            else if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+            }
+            // Oyuncu sağa hareket ediyor
+            else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+            }
+            // Hiçbir tuşa basılmıyorsa hareketi durdur
+            else {
+                player.setVelocityX(0);
+                player.setVelocityY(0);
+            }
+        }
+    </script>
+
+</body>
+</html>
